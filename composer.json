@@ -12,8 +12,7 @@
     }],
     "require": {
         "php": "^7.4",
-        "ext-curl": "*",
-        "bozerkins/clickhouse-client": "^1.1"
+        "smi2/phpclickhouse": "^1.5"
     },
     "autoload": {
         "psr-4": {
