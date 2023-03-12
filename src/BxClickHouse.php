@@ -16,12 +16,13 @@ class BxClickHouse extends Connection {
     
     const DEFAULT_PORT = '8123';
 
-    protected $host;
-    protected $port;
-    protected $timeout;
-    protected $database;
-    protected $login;
-    protected $password;
+    protected string $host;
+    protected string $port;
+    protected string $timeout;
+    protected string $database;
+    protected string $login;
+    protected string $password;
+    protected array $options;
 
     public function __construct(array $configuration) 
     {
@@ -33,6 +34,8 @@ class BxClickHouse extends Connection {
         $this->database = $configuration['database'] ?? '';
         $this->login = $configuration['login'] ?? '';
         $this->password = $configuration['password'] ?? '';
+
+        $this->options['readonly'] = $configuration['options']['readonly'] ?? 0;
     }
 
     protected function connectInternal() {
@@ -41,11 +44,12 @@ class BxClickHouse extends Connection {
             return;
         }
 
+        //TODO: options: readonly, etc.
         $config = new Config(
             // basic connection information
             ['host' => $this->host, 'port' => $this->port, 'protocol' => 'http'],
             // settings
-            ['database' => $this->database],
+            ['database' => $this->database, 'readonly' => intval($this->options['readonly'])],
             // credentials
             ['user' => $this->login, 'password' => $this->password],
             // set curl options
@@ -58,5 +62,21 @@ class BxClickHouse extends Connection {
 
     protected function disconnectInternal() {
 
+    }
+
+    public function ping() {
+        return $this->resource->ping();
+    }
+
+    public function query(string $sql) {
+        return $this->resource->query($sql);
+    }
+
+    public function write(string $sql) {
+        return $this->resource->write($sql);
+    }
+
+    public function writeRows(string $sql, array $rows) {
+        return $this->resource->writeRows($sql, $rows);
     }
 }
