@@ -11,8 +11,7 @@
         "homepage": "https://itrukhin.ru/"
     }],
     "require": {
-        "php": "^7.4",
-        "smi2/phpclickhouse": "^1.5"
+
     },
     "autoload": {
         "psr-4": {
